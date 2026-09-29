@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><rect width="800" height="600" fill="#121210"/><ellipse cx="400" cy="540" rx="240" ry="26" fill="rgba(0,0,0,0.5)"/>
+  <g transform="translate(200,60)">
+    <path d="M120 60 L55 95 L15 195 L75 220 L90 180 L90 440 Q200 465 310 440 L310 180 L325 220 L385 195 L345 95 L280 60 Q250 30 200 30 Q150 30 120 60 Z" fill="#eae5da" stroke="rgba(0,0,0,0.28)" stroke-width="3"/>
+    <!-- hood -->
+    <path d="M120 60 Q130 8 200 6 Q270 8 280 60 Q250 92 200 92 Q150 92 120 60 Z" fill="#eae5da" stroke="rgba(0,0,0,0.28)" stroke-width="3"/>
+    <path d="M136 58 Q150 26 200 24 Q250 26 264 58 Q240 80 200 80 Q160 80 136 58 Z" fill="rgba(0,0,0,0.30)"/>
+    <!-- drawstrings -->
+    <path d="M185 88 L182 150 M215 88 L218 150" stroke="rgba(255,255,255,0.55)" stroke-width="5" stroke-linecap="round"/>
+    <!-- pocket -->
+    <path d="M110 320 L290 320 L290 430 Q200 452 110 430 Z" fill="rgba(0,0,0,0.12)"/>
+    <text x="200" y="250" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="52" letter-spacing="2" fill="#161616">GOOD</text><text x="200" y="316" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="52" letter-spacing="2" fill="#161616">PEOPLE</text><text x="200" y="382" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="52" letter-spacing="2" fill="#161616">GOOD</text><text x="200" y="448" text-anchor="middle" font-family="Arial Black, Arial, sans-serif" font-weight="900" font-size="52" letter-spacing="2" fill="#161616">PLACES</text>
+  </g></svg>

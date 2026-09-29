@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900">
+  <defs><radialGradient id="hg" cx="0.62" cy="0.42" r="0.75">
+    <stop offset="0" stop-color="#2b2a26"/><stop offset="0.6" stop-color="#161614"/><stop offset="1" stop-color="#0a0a0a"/>
+  </radialGradient></defs>
+  <rect width="1600" height="900" fill="url(#hg)"/>
+  <ellipse cx="1000" cy="760" rx="330" ry="40" fill="rgba(0,0,0,0.6)"/>
+  <g transform="translate(760,120) scale(1.05)">
+    <path d="M120 40 L60 70 L20 160 L75 185 L88 150 L88 400 Q200 425 312 400 L312 150 L325 185 L380 160 L340 70 L280 40 Q240 70 200 70 Q160 70 120 40 Z" fill="#f0ece2" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
+    <path d="M120 40 Q200 78 280 40 Q240 68 200 68 Q160 68 120 40 Z" fill="rgba(0,0,0,0.15)"/>
+    <text x="200" y="230" text-anchor="middle" font-family="Arial Black, Arial" font-weight="900" font-size="92" fill="#161616" transform="rotate(-4 200 230)">OWNIT</text>
+    <text x="200" y="330" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="#3a3a35">ideas people places you</text>
+  </g>
+</svg>

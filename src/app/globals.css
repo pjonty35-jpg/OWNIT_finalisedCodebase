@@ -1,0 +1,544 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #0a0a0a;
+  --color-coal: #0f0f0e;
+  --color-surface: #141413;
+  --color-raise: #1b1b19;
+  --color-line: #262624;
+  --color-line2: #33332f;
+  --color-ivory: #f5f2ea;
+  --color-mute: #a39d92;
+  --color-faint: #6f6a61;
+  --color-accent: #e8e4d8;
+
+  --font-display: var(--font-archivo), "Arial Black", sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+  --font-hand: var(--font-caveat), cursive;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ---------- Motion system ---------- */
+/* One easing vocabulary across the whole app: fast attack, soft landing. */
+@theme {
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.4, 0.44, 1);
+  --ease-drift: cubic-bezier(0.45, 0, 0.15, 1);
+
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-float-y: floatY 7s var(--ease-drift) infinite;
+  --animate-pop-in: popIn 0.45s var(--ease-spring) both;
+  --animate-rise-in: riseIn 0.6s var(--ease-out-soft) both;
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-heartbeat: heartbeat 0.5s var(--ease-spring);
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes floatY {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  @keyframes popIn {
+    0% { opacity: 0; transform: scale(0.92); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  @keyframes riseIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+  @keyframes heartbeat {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+  }
+  @keyframes pointsFly {
+    0% { opacity: 0; transform: translateY(8px) scale(0.8); }
+    20% { opacity: 1; transform: translateY(0) scale(1.05); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translateY(-28px) scale(1); }
+  }
+}
+
+/* Component-level classes live in the components layer so Tailwind
+   utilities (absolute, sticky, fixed…) always win the cascade. */
+@layer components {
+
+/* Cinematic film grain — barely there, adds texture to flat dark areas. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Mobile GPUs pay heavily for full-screen filters. Keep the campaign texture
+   on larger displays and favour touch responsiveness on phones. */
+@media (max-width: 768px) {
+  .grain::after { display: none; }
+  .liquid,
+  .liquid-chip,
+  .liquid-bar,
+  .card-surface {
+    -webkit-backdrop-filter: blur(10px) saturate(1.15);
+    backdrop-filter: blur(10px) saturate(1.15);
+  }
+}
+
+/* Sticky-element glass treatment */
+.glass {
+  background: color-mix(in srgb, var(--color-ink) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+/* ------------------------------------------------------------------ */
+/* LIQUID GLASS — Apple-inspired translucent material system           */
+/* Three ingredients: refracting blur, a luminous gradient rim, and    */
+/* a specular highlight that answers the pointer.                      */
+/* ------------------------------------------------------------------ */
+
+.liquid {
+  position: relative;
+  background:
+    radial-gradient(120% 95% at 0% 0%, rgba(207, 232, 255, 0.17), transparent 48%),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.13) 0%, rgba(218, 239, 255, 0.035) 42%, rgba(181, 213, 236, 0.08) 100%),
+    color-mix(in srgb, #111c22 68%, transparent);
+  -webkit-backdrop-filter: blur(22px) saturate(1.35);
+  backdrop-filter: blur(22px) saturate(1.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 1px 0 0 rgba(202, 234, 255, 0.06),
+    inset 0 -1px 1px rgba(0, 17, 29, 0.4),
+    0 18px 52px -18px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(160, 210, 238, 0.04);
+}
+
+/* Luminous 1px gradient rim — light catching the edge of the pane. */
+.liquid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.07) 30%,
+    rgba(255, 255, 255, 0.02) 62%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Specular sheen that follows the pointer (set --mx / --my from JS or leave default). */
+.specular::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    260px circle at var(--mx, 28%) var(--my, 18%),
+    rgba(255, 255, 255, 0.11),
+    transparent 62%
+  );
+  opacity: 0;
+  transition: opacity 0.45s var(--ease-out-soft);
+  pointer-events: none;
+}
+.specular:hover::after {
+  opacity: 1;
+}
+
+/* Compact capsule chip — nav pills, filter chips, floating badges. */
+.liquid-chip {
+  position: relative;
+  background:
+    linear-gradient(135deg, rgba(232, 248, 255, 0.16) 0%, rgba(202, 233, 250, 0.04) 50%, rgba(226, 243, 255, 0.1) 100%),
+    color-mix(in srgb, #0e191f 58%, transparent);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(130, 184, 214, 0.1),
+    0 8px 24px -10px rgba(0, 0, 0, 0.55);
+}
+.liquid-chip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.04) 45%, rgba(255, 255, 255, 0.12));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Fixed bars (navbar, studio bars): liquid with a single luminous bottom edge. */
+.liquid-bar {
+  background: linear-gradient(180deg, rgba(217, 243, 255, 0.13) 0%, rgba(211, 238, 253, 0.025) 34%, transparent 100%),
+    color-mix(in srgb, #0c151b 72%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(1.35);
+  backdrop-filter: blur(24px) saturate(1.35);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.13), inset 0 -1px 0 rgba(189, 230, 255, 0.14);
+}
+
+/* Ice-frost surface: a cooler highlight band used by interactive elements. */
+.ice-frost {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    linear-gradient(145deg, rgba(240, 251, 255, .22), rgba(190, 225, 246, .08) 48%, rgba(168, 203, 228, .16)),
+    rgba(18, 34, 43, .66);
+  border: 1px solid rgba(226, 246, 255, .28);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.27), inset 0 -1px 0 rgba(111, 165, 196, .18), 0 10px 28px rgba(0, 0, 0, .22);
+  -webkit-backdrop-filter: blur(16px) saturate(1.25);
+  backdrop-filter: blur(16px) saturate(1.25);
+}
+.ice-frost::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 1px 26% auto 7%;
+  height: 42%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.27), transparent);
+  filter: blur(7px);
+  opacity: .78;
+  pointer-events: none;
+}
+
+/* Browsers without backdrop-filter get a confident solid instead of mush. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .liquid,
+  .liquid-chip,
+  .liquid-bar {
+    background: var(--color-surface);
+  }
+  .liquid::before,
+  .liquid-chip::before {
+    display: none;
+  }
+}
+
+/* Tactile press feedback for anything clickable */
+.press {
+  transition: transform 0.15s var(--ease-spring), box-shadow 0.2s ease;
+}
+.press:active {
+  transform: scale(0.965);
+}
+
+/* Editorial outline text — Gen-Z poster look */
+.text-stroke {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-line2);
+}
+.text-stroke-ivory {
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(245, 242, 234, 0.4);
+}
+
+/* Landing-page backdrop: brand artwork behind the whole page.
+   The layer itself is position:fixed (viewport-pinned), which gives the
+   cinematic pinned-artwork effect on every device — including iOS/iPad
+   where background-attachment:fixed is broken. Covers the full page down
+   to the footer; the footer is opaque so the artwork never shows through it. */
+.landing-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("/img/landing-bg.webp");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: 0.22;
+}
+@media (max-width: 768px) {
+  .landing-bg {
+    opacity: 0.26;
+  }
+}
+
+/* Footer artwork backdrop (OWNIT_Footer.png) — warm amber glow that sits
+   naturally behind the brand column. Overlay gradient + opacity keep text
+   at AA contrast; edges dissolve into the page so it never reads as a box. */
+.footer-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("/img/footer-bg.webp");
+  background-size: cover;
+  background-position: center 42%;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+}
+.footer-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(15, 15, 14, 0.42), rgba(15, 15, 14, 0.42)),
+    linear-gradient(180deg, var(--color-coal) 0%, transparent 26%, transparent 72%, var(--color-coal) 100%),
+    linear-gradient(90deg, rgba(15, 15, 14, 0.55) 0%, transparent 30%, transparent 70%, rgba(15, 15, 14, 0.55) 100%);
+}
+@media (max-width: 768px) {
+  .footer-bg {
+    background-position: 26% center;
+    opacity: 0.35;
+  }
+  .footer-bg::after {
+    background:
+      linear-gradient(rgba(15, 15, 14, 0.5), rgba(15, 15, 14, 0.5)),
+      linear-gradient(180deg, var(--color-coal) 0%, transparent 30%, transparent 70%, var(--color-coal) 100%);
+  }
+}
+
+@keyframes pointsFly {
+  0% { opacity: 0; transform: translateY(10px) scale(0.7); }
+  18% { opacity: 1; transform: translateY(0) scale(1.08); }
+  70% { opacity: 1; transform: translateY(-18px) scale(1); }
+  100% { opacity: 0; transform: translateY(-42px) scale(0.95); }
+}
+
+/* Plain top-level keyframes so raw CSS animations work even without
+   the matching Tailwind animate-* utility. Mirrors the @theme set. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.92); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
+
+/* Buttons: sheen sweep on hover */
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+.sheen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: translateX(-120%);
+  transition: transform 0.6s var(--ease-out-soft);
+  pointer-events: none;
+}
+.sheen:hover::before {
+  transform: translateX(120%);
+}
+.sheen:disabled::before {
+  display: none;
+}
+
+/* Card hover: raise + luminous rim bloom */
+.card-lift {
+  transition:
+    transform 0.35s var(--ease-out-soft),
+    border-color 0.25s ease,
+    box-shadow 0.35s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.22);
+  box-shadow:
+    0 28px 64px -24px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 0 0 1px rgba(245, 242, 234, 0.06);
+}
+
+} /* end @layer components */
+
+body {
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-line2);
+  border-radius: 8px;
+  border: 2px solid var(--color-ink);
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ivory);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@utility wrap {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 80rem;
+  padding-inline: 1.25rem;
+  @media (min-width: 1024px) {
+    padding-inline: 2rem;
+  }
+}
+
+@utility headline {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+@utility hand-note {
+  font-family: var(--font-hand);
+  color: var(--color-mute);
+}
+
+@utility card-surface {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--color-line2) 55%, transparent);
+  background:
+    linear-gradient(135deg, rgba(245, 242, 234, 0.07) 0%, rgba(245, 242, 234, 0.015) 40%, rgba(245, 242, 234, 0.04) 100%),
+    color-mix(in srgb, var(--color-surface) 72%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 12px 36px -18px rgba(0, 0, 0, 0.5);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .card-surface::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0.10));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+@utility label-caps {
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-mute);
+}
+
+/* Skip layout/paint for long landing-page sections until they approach view. */
+@utility defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 760px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* OWNIT PASS 3 — mobile 2D studio safety */
+@media (max-width: 1024px) {
+  .ownit-studio-shell {
+    min-height: 100dvh;
+    height: auto;
+    overflow-x: hidden;
+  }
+
+  .ownit-studio-canvas-wrap {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    touch-action: none;
+  }
+
+  .ownit-studio-canvas {
+    display: block;
+    width: min(100%, 1200px);
+    height: auto;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .ownit-studio-shell {
+    min-width: 0;
+  }
+
+  .ownit-studio-toolbar,
+  .ownit-studio-controls {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ownit-studio-toolbar::-webkit-scrollbar,
+  .ownit-studio-controls::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ownit-studio-canvas-wrap {
+    min-width: 0;
+    padding-inline: 8px;
+  }
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 750">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#1a1a18"/><stop offset="0.55" stop-color="#232320"/><stop offset="1" stop-color="#0d0d0c"/>
+  </linearGradient></defs>
+  <rect width="600" height="750" fill="url(#g)"/>
+  <circle cx="277" cy="109" r="97" fill="rgba(245,242,234,0.05)"/>
+  <path d="M0 600 L120 470 L230 590 L330 440 L440 580 L600 430 L600 750 L0 750 Z" fill="rgba(0,0,0,0.55)"/>
+  <path d="M0 650 L150 540 L290 660 L420 520 L600 640 L600 750 L0 750 Z" fill="rgba(0,0,0,0.75)"/>
+  <text x="300" y="392" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-size="30" fill="rgba(245,242,234,0.5)">gallery night</text>
+</svg>

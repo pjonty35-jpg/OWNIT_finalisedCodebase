@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600"><defs><radialGradient id="studio-light" cx="50%" cy="42%" r="70%"><stop stop-color="#484b42"/><stop offset="1" stop-color="#1d1f1b"/></radialGradient></defs><rect width="800" height="600" fill="url(#studio-light)"/><ellipse cx="400" cy="540" rx="240" ry="26" fill="rgba(0,0,0,0.35)"/>
+  <g transform="translate(240,160)">
+    <path d="M30 180 Q30 20 160 20 Q290 20 290 180 L290 220 L30 220 Z" fill="#141414" stroke="rgba(0,0,0,0.3)" stroke-width="3"/>
+    <rect x="30" y="200" width="260" height="60" rx="18" fill="#141414" stroke="rgba(0,0,0,0.3)" stroke-width="3"/>
+    <path d="M45 205 L45 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M67 205 L67 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M89 205 L89 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M111 205 L111 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M133 205 L133 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M155 205 L155 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M177 205 L177 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M199 205 L199 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M221 205 L221 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M243 205 L243 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M265 205 L265 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/><path d="M287 205 L287 255" stroke="rgba(0,0,0,0.16)" stroke-width="3"/>
+    <path d="M60 90 Q160 50 260 90" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="4"/>
+    
+  </g></svg>
